@@ -7,6 +7,6 @@ var Room = function(id){
     this.announce = null;
 }
 
-if(exports){
+if(typeof exports != 'undefined'){
     exports.Room = Room;
 }

@@ -2,7 +2,7 @@ var io = require('socket.io').listen(3000);
 var uuid = require('node-uuid');
 var User = require('../shared/user.js').User;
 var Room = require('../shared/room.js').Room;
-var Lobby = require('includes/lobby.js').Lobby;
+var Lobby = require('./includes/lobby.js').Lobby;
 
 Room.prototype.findUser = function(id){
     this.users.forEach(function(user, index, array){
@@ -25,6 +25,22 @@ Room.prototype.say = function(text){
     });
 }
 
+Lobby.prototype.announce = function(text){
+    this.rooms.forEach(function(room, index, array){
+        room.announce(text);
+    });
+}
+
+Lobby.prototype.fetchRoom = function(id){
+    this.rooms.forEach(function(room, index, array){
+        if(room.id == id){
+            return room;
+        }
+    });
+
+    return null;
+}
+
 var lobby = new Lobby();
 
 io.sockets.on('connection', function (socket){
@@ -40,7 +56,11 @@ io.sockets.on('connection', function (socket){
     });
 
     socket.on('registerClient', function(data){
-        var room = Lobby.fetchRoom(data.roomID);
+        var room = lobby.fetchRoom(data.roomID);
+        console.log(room);
+        console.log(data.roomID);
+        console.log(lobby);
+
         var user = new User();
 
         user.id = uuid.v4();
@@ -50,7 +70,7 @@ io.sockets.on('connection', function (socket){
         if(room){
             room.users.push(user);
 
-            if(room.users.length = 1){
+            if(room.users.length == 1){
                 room.admins.push(user.id);
                 user.admin = true;
             }

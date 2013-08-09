@@ -5,6 +5,6 @@ var User = function(id){
     this.socket = false;
 }
 
-if(typeof exports == 'undefined'){
+if(typeof exports != 'undefined'){
     exports.User = User;
 }
