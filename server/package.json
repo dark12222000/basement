@@ -4,6 +4,7 @@
     "private": true,
     "dependencies" :
     {
-        "socket" : "*"
+        "socket.io" : "*",
+        "node-uuid" : "*"
     }
 }
