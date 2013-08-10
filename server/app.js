@@ -4,18 +4,18 @@ var User = require('../shared/user.js').User;
 var Room = require('../shared/room.js').Room;
 var Lobby = require('./includes/lobby.js').Lobby;
 
-Room.prototype.findUser = function(id){
+Room.prototype.findUser = function(id, callback){
     this.users.forEach(function(user, index, array){
         if(user.id == id){
-            return user;
+            callback(user);
         }
     });
-    return false;
+    callback(null);
 }
 
 User.prototype.say = function(text, room){
     if(text && this.socket){
-        socket.emit('sayRoom', {user:this.id, room:room, text:text});
+        this.socket.emit('sayRoom', {user:this.id, room:room, text:text});
     }
 }
 
@@ -31,14 +31,15 @@ Lobby.prototype.announce = function(text){
     });
 }
 
-Lobby.prototype.fetchRoom = function(id){
+Lobby.prototype.fetchRoom = function(rid, callback){
     this.rooms.forEach(function(room, index, array){
-        if(room.id == id){
-            return room;
+
+        if(room.id == rid){
+            callback(room);
         }
     });
 
-    return null;
+    callback(null);
 }
 
 var lobby = new Lobby();
@@ -50,46 +51,49 @@ io.sockets.on('connection', function (socket){
         var temp = new Room();
         temp.id = uuid.v4();
 
+        console.log(lobby);
         lobby.rooms.push(temp);
+        console.log(lobby);
 
         socket.emit('roomCreated', {roomID: temp.id});
     });
 
     socket.on('registerClient', function(data){
-        var room = lobby.fetchRoom(data.roomID);
-        console.log(room);
-        console.log(data.roomID);
-        console.log(lobby);
+        var room = lobby.fetchRoom(data.roomID, function(room){
 
-        var user = new User();
+            var user = new User();
 
-        user.id = uuid.v4();
-        user.name = data.name;
-        user.socket = socket;
+            user.id = uuid.v4();
+            user.name = data.name;
+            user.socket = socket;
 
-        if(room){
-            room.users.push(user);
+            if(room){
+                room.users.push(user);
 
-            if(room.users.length == 1){
-                room.admins.push(user.id);
-                user.admin = true;
+                if(room.users.length == 1){
+                    room.admins.push(user.id);
+                    user.admin = true;
+                }
+
+                socket.emit('clientRegistered', {userId: user.id, admin:user.admin});
             }
+        });
 
-            socket.emit('clientRegistered', {userId: user.id, admin:user.admin});
-        }
+        
 
 
     });
 
     socket.on('doSay', function(data){
-        var room = Lobby.fetchRoom(data.roomID);
-
-        if(room){
-            var user = room.findUser(data.sender);
-            if(user){
-                room.say(user.name + ":" + data.text);
+        var room = lobby.fetchRoom(data.roomID, function(room){
+            if(room){
+                var user = room.findUser(data.sender, function(user){
+                    if(user){
+                        room.say(user.name + ":" + data.text);
+                    }
+                });
             }
-        }
+        });
     });
 
     socket.on('doCmd', function(data){

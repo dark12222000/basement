@@ -3,8 +3,6 @@ var Room = function(id){
     this.title = null;
     this.admins = [];
     this.users = [];
-    this.say = null;
-    this.announce = null;
 }
 
 if(typeof exports != 'undefined'){
