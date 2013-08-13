@@ -29,5 +29,13 @@ socket.on('connected', function(event){
 	
 	socket.on('clientRegistered', function(response){
 		console.log('clientRegistered: ', response);
+		user.id = response.userId;
+		user.isAdmin = response.admin;
+		socket.emit('getClients', { sender: user.id, room: room.id });
+	});
+	
+	socket.on('sendClients', function(response){
+		console.log('sendClients: ', response);
+		console.log('Connected Clients are: ', response.clients);
 	});
 });
