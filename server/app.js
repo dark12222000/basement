@@ -101,6 +101,14 @@ io.sockets.on('connection', function (socket){
     });
 
     socket.on('getClients', function(data){
-
+         var room = lobby.fetchRoom(data.roomID, function(room){
+            if(room){
+                var users = [];
+                room.users.forEach(function(user, index, array){
+                    users.push(user.name);
+                })
+                socket.emit('sendClients', {room:data.roomID, clients: users});
+            }
+        });
     });
 });
