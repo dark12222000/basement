@@ -4,7 +4,7 @@ var socket = io.connect('http://bs1.adventurestory.net:3000');
 
 socket.on('connected', function(event){
 	console.log('Connected successfully to socket');
-
+	
 	var user = {};
 	var room = { id: document.location.hash.substr(1) };
 	
@@ -45,10 +45,6 @@ socket.on('connected', function(event){
 		socket.emit('getClients', { sender: user.ID, roomID: room.id });
 	});
 	
-	window.onbeforeunload = function(){
-		//return "test"; // Unregister the user if we can
-	}
-	
 	socket.on('sendClients', function(response){
 		console.log('sendClients: ', response);
 		console.log('Connected Clients are: ', response.clients);
@@ -60,6 +56,16 @@ socket.on('connected', function(event){
 	});
 	
 	socket.on('sayRoom', function(response){
-		$('#socket-room').prepend('<p>' + response.text + '</p>').scrollTop($('#socket-room')[0].scrollHeight);
+		var theRoom = $('#socket-room');
+		if(theRoom[0].scrollHeight - theRoom.outerHeight() < theRoom.scrollTop())
+			var scrollDown = true;
+		
+		theRoom.prepend('<p>' + response.text + '</p>');
+		
+		if(scrollDown) theRoom.scrollTop(theRoom[0].scrollHeight);
 	});
+	
+	window.onbeforeunload = function(){
+		//return "test"; // Unregister the user if we can
+	}
 });
