@@ -60,7 +60,6 @@ socket.on('connected', function(event){
 	});
 	
 	socket.on('sayRoom', function(response){
-	console.log(response);
-		$('#socket-room').prepend('<p><span class="username">' + response.user + '</span>: ' + response.text + '</p>');
+		$('#socket-room').prepend('<p>' + response.text + '</p>').scrollTop($('#socket-room')[0].scrollHeight);
 	});
 });

@@ -1,3 +1,4 @@
-#room {
+#socket-room {
 	height: 20em;
+	overflow-x: hidden;
 }
