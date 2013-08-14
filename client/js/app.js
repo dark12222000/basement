@@ -29,9 +29,9 @@ socket.on('connected', function(event){
 	
 	socket.on('clientRegistered', function(response){
 		console.log('clientRegistered: ', response);
-		user.id = response.userId;
+		user.id = response.userID;
 		user.isAdmin = response.admin;
-		socket.emit('getClients', { sender: user.id, room: room.id });
+		socket.emit('getClients', { sender: user.ID, roomID: room.id });
 	});
 	
 	socket.on('sendClients', function(response){

@@ -75,7 +75,7 @@ io.sockets.on('connection', function (socket){
                     user.admin = true;
                 }
 
-                socket.emit('clientRegistered', {userId: user.id, admin:user.admin});
+                socket.emit('clientRegistered', {userID: user.id, admin:user.admin});
             }
         });
 
