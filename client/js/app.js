@@ -3,12 +3,13 @@ $(document).foundation();
 var socket = io.connect('http://bs1.adventurestory.net:3000');
 
 socket.on('connected', function(event){
-	console.log('Connected successfully to socket', event);
+	console.log('Connected successfully to socket');
+
+	var user = {};
+	var room = { id: document.location.hash.substr(1) };
 	
-	var room = new Object();
-	var user = new Object();
-	
-	$('#createRoom').foundation('reveal', 'open');
+	if(room.id) $('#registerClient').foundation('reveal', 'open');
+	else $('#createRoom').foundation('reveal', 'open');
 	
 	/* UI Binds */
 	$('.createRoom').on('click', function(){
@@ -37,5 +38,9 @@ socket.on('connected', function(event){
 	socket.on('sendClients', function(response){
 		console.log('sendClients: ', response);
 		console.log('Connected Clients are: ', response.clients);
+		$('#socket-users').html('');
+		$.each(response.clients, function(index, user) {
+			$('#socket-users').append('<li>'+user);
+		});
 	});
 });
