@@ -22,6 +22,12 @@ socket.on('connected', function(event){
 		return false;
 	});
 	
+	$('form#socket-chatbox').submit(function(){
+		socket.emit('doSay', { sender: user.id, roomID: room.id, text: $(this).find('[name=socket-message]').val() });
+		$(this).find('[name=socket-message]').val('');
+		return false;
+	});
+	
 	/* Event Binds */
 	socket.on('roomCreated', function(response){
 		console.log('roomCreated: ', response);
@@ -51,5 +57,9 @@ socket.on('connected', function(event){
 			$('#socket-users').append('<li>'+user);
 		});
 		$('#socket-room').text('You are connected to room ' + room.id);
+	});
+	
+	socket.on('sayRoom', function(response){
+		$('#socket-room').prepend('<p><span class="username">' + response.user + '</span>: ' + response.text + '</p>');
 	});
 });
