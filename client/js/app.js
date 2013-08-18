@@ -60,6 +60,10 @@ socket.on('connected', function(event){
 		$('#socket-room').text('You are connected to room ' + room.id);
 	});
 	
+	socket.on('updateClients', function(response){
+		socket.emit('getClients', { sender: user.ID, roomID: room.id });
+	});
+	
 	socket.on('sayRoom', function(response){
 		var theRoom = $('#socket-room');
 		if(theRoom[0].scrollHeight - theRoom.outerHeight() < theRoom.scrollTop())
