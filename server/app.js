@@ -75,12 +75,14 @@ io.sockets.on('connection', function (socket){
                     user.admin = true;
                 }
 
+                socket.set('userID', user.id);
+                socket.set('roomID', room.id);
+                room.users.forEach(function(user){
+                    user.socket.emit('updateClients', {});
+                });
                 socket.emit('clientRegistered', {userID: user.id, admin:user.admin});
             }
         });
-
-        
-
 
     });
 
@@ -111,4 +113,28 @@ io.sockets.on('connection', function (socket){
             }
         });
     });
+
+    socket.on('disconnect', function(){
+        socket.get('userID', function(err, userID){
+            socket.get('roomID', function(err, roomID){
+                var room = lobby.fetchRoom(roomID, function(room){
+                    room.users.forEach(function(user, index, array){
+                        delete room.users[index];
+                        room.users.forEach(function(user){
+                            user.socket.emit('updateClients', {});
+                        });
+                    });
+                });
+            })
+        })
+    });
+
+    setTimeout(function(){
+        lobby.rooms.forEach(function(room, index, array){
+            if(room.users.length == 0){
+                delete lobby.rooms[index];
+            }
+        });
+    }, 1000 * 60 * 5);
+
 });
