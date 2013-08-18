@@ -2,3 +2,7 @@
 	height: 20em;
 	overflow-x: hidden;
 }
+
+#socket-room .username {
+	color: #2ba6cb;
+}

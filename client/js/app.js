@@ -23,8 +23,11 @@ socket.on('connected', function(event){
 	});
 	
 	$('form#socket-chatbox').submit(function(){
-		socket.emit('doSay', { sender: user.id, roomID: room.id, text: $(this).find('[name=socket-message]').val() });
+		var message = $(this).find('[name=socket-message]').val();
 		$(this).find('[name=socket-message]').val('');
+		
+		if(message.charAt(0) == '/') socket.emit('doCmd', { sender: user.id, roomID: room.id, text: message });
+		else socket.emit('doSay', { sender: user.id, roomID: room.id, text: message });
 		return false;
 	});
 	
@@ -60,7 +63,10 @@ socket.on('connected', function(event){
 		if(theRoom[0].scrollHeight - theRoom.outerHeight() < theRoom.scrollTop())
 			var scrollDown = true;
 		
-		theRoom.prepend('<p>' + response.text + '</p>');
+		var username = response.text.split(':', 1)[0];
+		var message = response.text.substring(username.length + 1, response.text.length);
+		
+		theRoom.prepend('<p><span class="username">' + username + ':</span> ' + message+ '</p>');
 		
 		if(scrollDown) theRoom.scrollTop(theRoom[0].scrollHeight);
 	});
