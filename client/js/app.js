@@ -8,8 +8,12 @@ socket.on('connected', function(event){
 	var user = {};
 	var room = { id: document.location.hash.substr(1) };
 	
-	if(room.id) $('#registerClient').foundation('reveal', 'open');
-	else $('#createRoom').foundation('reveal', 'open');
+	if(room.id) $('#registerClient').foundation('reveal', 'open', {
+			closeOnBackgroundClick: false
+		});
+	else $('#createRoom').foundation('reveal', 'open', {
+			closeOnBackgroundClick: false
+		});
 	
 	/* UI Binds */
 	$('.createRoom').on('click', function(){
@@ -76,8 +80,4 @@ socket.on('connected', function(event){
 		
 		if(scrollDown) theRoom.scrollTop(theRoom[0].scrollHeight);
 	});
-	
-	window.onbeforeunload = function(){
-		//return "test"; // Unregister the user if we can
-	}
 });
