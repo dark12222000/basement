@@ -1,3 +1,9 @@
+
+
+#socket-users li {	list-style-type: none; }
+
+#socket-users li:first-child { color: #35BE00; }
+
 #socket-room {
 	height: 20em;
 	overflow-x: hidden;

@@ -26,8 +26,10 @@ socket.on('connected', function(event){
 		var message = $(this).find('[name=socket-message]').val();
 		$(this).find('[name=socket-message]').val('');
 		
-		if(message.charAt(0) == '/') socket.emit('doCmd', { sender: user.id, roomID: room.id, text: message });
-		else socket.emit('doSay', { sender: user.id, roomID: room.id, text: message });
+		if(message){
+			if(message.charAt(0) == '/') socket.emit('doCmd', { sender: user.id, roomID: room.id, text: message });
+			else socket.emit('doSay', { sender: user.id, roomID: room.id, text: message });
+		}
 		return false;
 	});
 	
