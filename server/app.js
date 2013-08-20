@@ -17,7 +17,7 @@ Room.prototype.findUser = function(id, callback){
 User.prototype.say = function(text, roomID, type){
     if(text && this.socket){
         type = type ? type : 'normal';
-        this.socket.emit('sayRoom', {user:this.id, room:roomID, text:text, type:type});
+        this.socket.emit('say', {user:this.id, room:roomID, text:text, type:type});
     }
 }
 
