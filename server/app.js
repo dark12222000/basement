@@ -14,21 +14,35 @@ Room.prototype.findUser = function(id, callback){
     return false;
 }
 
-User.prototype.say = function(text, room){
+User.prototype.say = function(text, roomID, type){
     if(text && this.socket){
-        this.socket.emit('sayRoom', {user:this.id, room:room, text:text});
+        type = type ? type : 'normal';
+        this.socket.emit('sayRoom', {user:this.id, room:roomID, text:text, type:type});
     }
 }
 
-Room.prototype.say = function(text){
+User.prototype.sayOthers = function(text, room, type){
+    if(text && this.socket && room){
+        room.users.forEach(function(userS){
+            if(userS.id != this.id){
+                console.log('::SAY OTHERS::');
+                console.log(userS);
+                console.log(this.id);
+                userS.say(text, room.id, type);
+            }
+        });
+    }
+}
+
+Room.prototype.say = function(text, type){
     this.users.forEach(function(user, index, array){
-        user.say(text, this.id);
+        user.say(text, this.id, type);
     });
 }
 
 Lobby.prototype.announce = function(text){
     this.rooms.forEach(function(room, index, array){
-        room.announce(text);
+        room.say(text, room.id, 'announce');
     });
 }
 
@@ -67,7 +81,15 @@ io.sockets.on('connection', function (socket){
             user.name = data.name;
             user.socket = socket;
 
-            if(room){
+            var unique = true;
+
+            room.users.forEach(function(userS){
+                if(userS.name == user.name){
+                    unique = false;
+                }
+            });
+
+            if(room && unique){
                 room.users.push(user);
 
                 if(room.users.length == 1){
@@ -139,8 +161,8 @@ io.sockets.on('connection', function (socket){
                         }
                     });
                 });
-            })
-        })
+            });
+        });
     });
 
     setTimeout(function(){
@@ -156,10 +178,21 @@ io.sockets.on('connection', function (socket){
         var proc = cmdString.toLowerCase().split(' ');
         var cmd = proc[0].substr(1);
 
-        cmdProcessor(cmd, proc, raw, room, user);
+        socket.get('userID', function(err, userID){
+            socket.get('roomID', function(err, roomID){
+               if(userID == user.id && roomID == room.id){
+                    //authenticated
+                    cmdProcessor(cmd, cmdString, proc, raw, room, user);
+               }
+            })
+        })
+
+        
     }
 
     function resolveDice(diceString){
+        diceString = diceString ? diceString : '1d6';
+
         var dice = diceString.split('d');
         var number = dice[0];
         var face = dice[1];
@@ -167,8 +200,8 @@ io.sockets.on('connection', function (socket){
         output.rolls = [];
         output.total = 0;
 
-        number = number ? number : 1;
-        face = face ? face : 6;
+        number = isFinite(number) ? number : 1;
+        face = isFinite(face) ? face : 6;
 
         for(var i = 0; i < number; i++){
             var roll = Math.max(Math.round(Math.random() * face), 1);
@@ -179,7 +212,7 @@ io.sockets.on('connection', function (socket){
         return output;
     }
 
-    function cmdProcessor(cmd, proc, raw, room, user){
+    function cmdProcessor(cmd, cmdString, proc, raw, room, user){
         if(!user){
             user = {};
             user.name = "A Ghost";
@@ -187,11 +220,18 @@ io.sockets.on('connection', function (socket){
         switch(cmd){
             case 'roll':
                 var output = resolveDice(proc[1]);
-                room.say(user.name + ' rolls the dice and gets ' + JSON.stringify(output.rolls) + ' (' + output.total + ').');
+                room.say(user.name + ' rolls the dice and gets ' + JSON.stringify(output.rolls) + ' (' + output.total + ').', room.id, 'cmd');
                 return true;
             break;
             case 'proll':
-
+                var output = resolveDice(proc[1]);
+                user.say('You roll the dice and get ' + JSON.stringify(output.rolls) + ' (' + output.total + ').', room.id, 'cmd');
+                user.sayOthers(user.name + " quietly rolls the dice.", room, 'cmd');
+                return true;
+            break;
+            case 'say':
+                room.say(user.name + ' : ' + cmdString.substr(5), room.id, 'normal');
+                return true;
             break;
             default:
                 return false;
