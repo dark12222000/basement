@@ -38,6 +38,16 @@ Room.prototype.say = function(text, type){
     });
 }
 
+Room.prototype.findByName = function(name, callback){
+    this.users.forEach(function(user){
+        if(user.name.toLowerCase() == name.toLowerCase()){
+            callback(user);
+            return true;
+        }
+    });
+    return false;
+}
+
 Lobby.prototype.announce = function(text){
     this.rooms.forEach(function(room, index, array){
         room.say(text, room.id, 'announce');
@@ -82,7 +92,7 @@ io.sockets.on('connection', function (socket){
             var unique = true;
 
             room.users.forEach(function(userS){
-                if(userS.name == user.name){
+                if(userS.name.toLowerCase() == user.name.toLowerCase()){
                     unique = false;
                 }
             });
@@ -229,6 +239,13 @@ io.sockets.on('connection', function (socket){
             break;
             case 'say':
                 room.say(user.name + ' : ' + cmdString.substr(5), room.id, 'normal');
+                return true;
+            break;
+            case 'whisper': //fallthrough
+            case 'tell':
+                room.findByName(proc[1], function(foundUser){
+                    foundUser.say(user.name + " whispers: " + cmdString.substr(proc[0].length + proc[1].length + 2), room.id, 'whisper');
+                });
                 return true;
             break;
             default:
