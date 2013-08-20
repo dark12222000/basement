@@ -272,7 +272,7 @@ process.stdin.on('data', function (line) {
             console.log(lobby);
         break;
         case 'announce':
-            lobby.announce(line.substr(proc[0] + 1));
+            lobby.announce(line.substr(proc[0].length + 1));
             console.log('Announcement Sent');
         break;
         case 'debug':
