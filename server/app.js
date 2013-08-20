@@ -73,9 +73,7 @@ io.sockets.on('connection', function (socket){
         var temp = new Room();
         temp.id = uuid.v4();
 
-        console.log(lobby);
         lobby.rooms.push(temp);
-        console.log(lobby);
 
         socket.emit('roomCreated', {roomID: temp.id});
     });
@@ -254,4 +252,46 @@ io.sockets.on('connection', function (socket){
         }
     }
 
+});
+
+//Program Body
+process.stdin.resume();
+process.stdin.setEncoding('utf8');
+ 
+process.stdin.on('data', function (line) {
+    line = line.toString().trim();
+    var raw = line.split(' ');
+    var proc = line.toLowerCase().split(' ');
+    var cmd = proc[0];
+
+    switch(cmd){
+        case 'ping':
+            console.log('pong');
+        break;
+        case 'lobby':
+            console.log(lobby);
+        break;
+        case 'announce':
+            lobby.announce(line.substr(proc[0] + 1));
+            console.log('Announcement Sent');
+        break;
+        case 'debug':
+            if(proc[1] == 'off'){
+                io.set('log level', 1);
+                console.log('Debug disabled');
+            }else if(proc[1] == 'on'){
+                io.set('log level', 3);
+                console.log('Debug enabled');
+            }
+        break;
+        case 'help':
+            console.log('announce (msg) - announces (msg) to all rooms');
+            console.log('debug (on | off) - changes debug text');
+            console.log('lobby - outputs lobby');
+            console.log('ping - outputs pong');
+        break;
+        default:
+            console.log('Command not recognized.');
+        break;
+    }
 });
