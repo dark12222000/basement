@@ -23,11 +23,9 @@ User.prototype.say = function(text, roomID, type){
 
 User.prototype.sayOthers = function(text, room, type){
     if(text && this.socket && room){
+        var user = this;
         room.users.forEach(function(userS){
-            if(userS.id != this.id){
-                console.log('::SAY OTHERS::');
-                console.log(userS);
-                console.log(this.id);
+            if(userS.id != user.id){
                 userS.say(text, room.id, type);
             }
         });
