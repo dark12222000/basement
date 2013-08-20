@@ -8,9 +8,10 @@ Room.prototype.findUser = function(id, callback){
     this.users.forEach(function(user, index, array){
         if(user.id == id){
             callback(user);
+            return true;
         }
     });
-    callback(null);
+    return false;
 }
 
 User.prototype.say = function(text, room){
@@ -33,13 +34,12 @@ Lobby.prototype.announce = function(text){
 
 Lobby.prototype.fetchRoom = function(rid, callback){
     this.rooms.forEach(function(room, index, array){
-
         if(room.id == rid){
             callback(room);
+            return true;
         }
     });
-
-    callback(null);
+    return false;
 }
 
 var lobby = new Lobby();
@@ -99,7 +99,18 @@ io.sockets.on('connection', function (socket){
     });
 
     socket.on('doCmd', function(data){
-
+        console.log(data);
+        if(data.sender && data.roomID){
+            lobby.fetchRoom(data.roomID, function(room){
+                if(room){
+                    room.findUser(data.sender, function(user){
+                       if(user){
+                            tokenize(data.text, room, user); 
+                       }
+                    });
+                }
+            });
+        }
     });
 
     socket.on('getClients', function(data){
@@ -119,10 +130,13 @@ io.sockets.on('connection', function (socket){
             socket.get('roomID', function(err, roomID){
                 var room = lobby.fetchRoom(roomID, function(room){
                     room.users.forEach(function(user, index, array){
-                        delete room.users[index];
-                        room.users.forEach(function(user){
-                            user.socket.emit('updateClients', {});
-                        });
+                        if(user.id == userID){
+                            delete room.users[index];
+                            room.users.forEach(function(user){
+                                user.socket.emit('updateClients', {});
+                            });
+                            console.log('User Disconnected: ' + user.name)
+                        }
                     });
                 });
             })
@@ -136,5 +150,53 @@ io.sockets.on('connection', function (socket){
             }
         });
     }, 1000 * 60 * 5);
+
+    function tokenize(cmdString, room, user){
+        var raw = cmdString.split(' ');
+        var proc = cmdString.toLowerCase().split(' ');
+        var cmd = proc[0].substr(1);
+
+        cmdProcessor(cmd, proc, raw, room, user);
+    }
+
+    function resolveDice(diceString){
+        var dice = diceString.split('d');
+        var number = dice[0];
+        var face = dice[1];
+        var output = {};
+        output.rolls = [];
+        output.total = 0;
+
+        number = number ? number : 1;
+        face = face ? face : 6;
+
+        for(var i = 0; i < number; i++){
+            var roll = Math.max(Math.round(Math.random() * face), 1);
+            output.rolls.push(roll);
+            output.total += roll;
+        }
+
+        return output;
+    }
+
+    function cmdProcessor(cmd, proc, raw, room, user){
+        if(!user){
+            user = {};
+            user.name = "A Ghost";
+        }
+        switch(cmd){
+            case 'roll':
+                var output = resolveDice(proc[1]);
+                room.say(user.name + ' rolls the dice and gets ' + JSON.stringify(output.rolls) + ' (' + output.total + ').');
+                return true;
+            break;
+            case 'proll':
+
+            break;
+            default:
+                return false;
+            break;
+        }
+    }
 
 });
