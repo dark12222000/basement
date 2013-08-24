@@ -114,7 +114,7 @@ io.sockets.on('connection', function (socket){
 
     });
 
-    socket.on('doSay', function(data){
+    /*socket.on('doSay', function(data){
         var room = lobby.fetchRoom(data.roomID, function(room){
             if(room){
                 var user = room.findUser(data.sender, function(user){
@@ -124,7 +124,7 @@ io.sockets.on('connection', function (socket){
                 });
             }
         });
-    });
+    });*/
 
     socket.on('doCmd', function(data){
         console.log(data);
@@ -226,17 +226,21 @@ io.sockets.on('connection', function (socket){
         switch(cmd){
             case 'roll':
                 var output = resolveDice(proc[1]);
-                room.say(user.name + ' rolls the dice and gets ' + JSON.stringify(output.rolls) + ' (' + output.total + ').', room.id, 'cmd');
+                room.say(user.name + ': rolls the dice and gets ' + JSON.stringify(output.rolls) + ' (' + output.total + ').', room.id, 'cmd');
                 return true;
             break;
             case 'proll':
                 var output = resolveDice(proc[1]);
                 user.say('You roll the dice and get ' + JSON.stringify(output.rolls) + ' (' + output.total + ').', room.id, 'cmd');
-                user.sayOthers(user.name + " quietly rolls the dice.", room, 'cmd');
+                user.sayOthers(user.name + ": quietly rolls the dice.", room, 'cmd');
                 return true;
             break;
             case 'say':
-                room.say(user.name + ' : ' + cmdString.substr(5), room.id, 'normal');
+                room.say(user.name + ': ' + cmdString.substr(5), room.id, 'normal');
+                return true;
+            break;
+            case 'shout':
+                room.say(user.name + ': ' + cmdString.substr(5), room.id, 'shout');
                 return true;
             break;
             case 'whisper': //fallthrough

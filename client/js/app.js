@@ -77,7 +77,7 @@ socket.on('connected', function(event){
 		var username = response.text.split(':', 1)[0];
 		var message = response.text.substring(username.length + 1, response.text.length);
 		
-		theRoom.prepend('<p><span class="username">' + username + ':</span> ' + message+ '</p>');
+		theRoom.prepend('<p><span class="username">' + username + ':</span> <span class="'+ response.type +'">' + message+ '</span></p>');
 		
 		if(scrollDown) theRoom.scrollTop(theRoom[0].scrollHeight);
 	});
