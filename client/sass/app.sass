@@ -4,10 +4,12 @@ $admin: #35be00
 #socket-room
 	height: 20em
 	overflow-x: hidden
-	.user
-		color: $user
+	// User Types
 	.admin
 		color: $admin
+	.user
+		color: $user  
+	// Message Types
 	.cmd
 		color: #DAA500
 	.whisper
@@ -17,6 +19,8 @@ $admin: #35be00
 
 #socket-users li
 	list-style-type: none
-	color: $user
-	&:first-child
+	// User Types
+	&.admin
 		color: $admin
+	&.user
+		color: $user

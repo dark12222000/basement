@@ -1,19 +1,16 @@
 $(document).foundation();
 
+var user = {};
 var socket = io.connect('http://bs1.adventurestory.net:3000');
 
 socket.on('connected', function(event){
 	console.log('Connected successfully to socket');
 	
-	var user = {};
 	var room = { id: document.location.hash.substr(1) };
 	
-	if(room.id) $('#registerClient').foundation('reveal', 'open', {
-			closeOnBackgroundClick: false
-		});
-	else $('#createRoom').foundation('reveal', 'open', {
-			closeOnBackgroundClick: false
-		});
+	/* Foundation Events */
+	if(room.id) $('#registerClient').foundation('reveal', 'open', { closeOnBackgroundClick: false });
+	else $('#createRoom').foundation('reveal', 'open', { closeOnBackgroundClick: false });
 	
 	/* UI Binds */
 	$('.createRoom').on('click', function(){
@@ -52,16 +49,16 @@ socket.on('connected', function(event){
 			.find('#socket-url').val(document.location.pathname + '#' + room.id)
 			.on('click', function(){ this.select(); }
 		);
-		socket.emit('getClients', { sender: user.ID, roomID: room.id });
 	});
 	
 	socket.on('sendClients', function(response){
 		console.log('sendClients: ', response);
 		$('#socket-users').html('');
 		$.each(response.clients, function(index, user) {
-			$('#socket-users').append('<li>'+user);
+			var userType = index == 0 ? 'admin' : 'user';
+			$('#socket-users').append('<li class="'+ userType +'">'+user);
 		});
-		$('#socket-room').text('You are connected to room ' + room.id);
+		$('#socket-room').append('<p>You are connected to room ' + room.id + '</p>');
 	});
 	
 	socket.on('updateClients', function(response){
