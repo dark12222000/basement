@@ -2,8 +2,11 @@
   height: 20em;
   overflow-x: hidden;
 }
-#socket-room .username {
+#socket-room .user {
   color: #2ba6cb;
+}
+#socket-room .admin {
+  color: #35be00;
 }
 #socket-room .cmd {
   color: #daa500;
@@ -17,6 +20,7 @@
 
 #socket-users li {
   list-style-type: none;
+  color: #2ba6cb;
 }
 #socket-users li:first-child {
   color: #35be00;

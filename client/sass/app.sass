@@ -1,8 +1,13 @@
+$user: #2ba6cb
+$admin: #35be00
+
 #socket-room
 	height: 20em
 	overflow-x: hidden
-	.username
-		color: #2BA6CB
+	.user
+		color: $user
+	.admin
+		color: $admin
 	.cmd
 		color: #DAA500
 	.whisper
@@ -12,5 +17,6 @@
 
 #socket-users li
 	list-style-type: none
+	color: $user
 	&:first-child
-		color: #35BE00
+		color: $admin
