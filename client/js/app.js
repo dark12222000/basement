@@ -31,8 +31,9 @@ socket.on('connected', function(event){
 		$(this).find('[name=socket-message]').val('');
 		
 		if(message){
-			if(message.charAt(0) == '/') socket.emit('doCmd', { sender: user.id, roomID: room.id, text: message });
-			else socket.emit('doSay', { sender: user.id, roomID: room.id, text: message });
+			//if(message.charAt(0) == '/') socket.emit('doCmd', { sender: user.id, roomID: room.id, text: message });
+			//else socket.emit('doSay', { sender: user.id, roomID: room.id, text: message });
+			socket.emit('doCmd', { sender: user.id, roomID: room.id, text: message });
 		}
 		return false;
 	});
@@ -68,7 +69,7 @@ socket.on('connected', function(event){
 		socket.emit('getClients', { sender: user.ID, roomID: room.id });
 	});
 	
-	socket.on('sayRoom', function(response){
+	socket.on('say', function(response){
 		var theRoom = $('#socket-room');
 		if(theRoom[0].scrollHeight - theRoom.outerHeight() < theRoom.scrollTop())
 			var scrollDown = true;
