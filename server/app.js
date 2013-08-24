@@ -226,27 +226,27 @@ io.sockets.on('connection', function (socket){
         switch(cmd){
             case 'roll':
                 var output = resolveDice(proc[1]);
-                room.say(user.name + ': rolls the dice and gets ' + JSON.stringify(output.rolls) + ' (' + output.total + ').', room.id, 'cmd');
+                room.say(user.name + ': rolls the dice and gets ' + JSON.stringify(output.rolls) + ' (' + output.total + ').', 'cmd'); //room.id
                 return true;
             break;
             case 'proll':
                 var output = resolveDice(proc[1]);
-                user.say('You roll the dice and get ' + JSON.stringify(output.rolls) + ' (' + output.total + ').', room.id, 'cmd');
+                user.say('You roll the dice and get ' + JSON.stringify(output.rolls) + ' (' + output.total + ').', 'cmd'); //room.id
                 user.sayOthers(user.name + ": quietly rolls the dice.", room, 'cmd');
                 return true;
             break;
             case 'say':
-                room.say(user.name + ': ' + cmdString.substr(5), room.id, 'normal');
+                room.say(user.name + ': ' + cmdString.substr(5), 'normal'); //room.id
                 return true;
             break;
             case 'shout':
-                room.say(user.name + ': ' + cmdString.substr(5), room.id, 'shout');
+                room.say(user.name + ': ' + cmdString.substr(5), 'shout'); //room.id
                 return true;
             break;
             case 'whisper': //fallthrough
             case 'tell':
                 room.findByName(proc[1], function(foundUser){
-                    foundUser.say(user.name + " whispers: " + cmdString.substr(proc[0].length + proc[1].length + 2), room.id, 'whisper');
+                    foundUser.say(user.name + " whispers: " + cmdString.substr(proc[0].length + proc[1].length + 2), 'whisper'); //room.id
                 });
                 return true;
             break;

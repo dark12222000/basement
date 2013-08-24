@@ -70,6 +70,7 @@ socket.on('connected', function(event){
 	});
 	
 	socket.on('say', function(response){
+		console.log('Server said: ', response);
 		var theRoom = $('#socket-room');
 		if(theRoom[0].scrollHeight - theRoom.outerHeight() < theRoom.scrollTop())
 			var scrollDown = true;
