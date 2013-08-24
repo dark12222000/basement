@@ -240,7 +240,7 @@ io.sockets.on('connection', function (socket){
                 return true;
             break;
             case 'shout':
-                room.say(user.name + ': ' + cmdString.substr(5), 'shout'); //room.id
+                room.say(user.name + ': ' + cmdString.substr(7), 'shout'); //room.id
                 return true;
             break;
             case 'whisper': //fallthrough
