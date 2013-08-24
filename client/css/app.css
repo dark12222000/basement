@@ -1,20 +1,23 @@
-
-
-#socket-users li {	list-style-type: none; }
-
-#socket-users li:first-child { color: #35BE00; }
-
-/* Chatroom and Messages */
-
 #socket-room {
-	height: 20em;
-	overflow-x: hidden;
+  height: 20em;
+  overflow-x: hidden;
+}
+#socket-room .username {
+  color: #2ba6cb;
+}
+#socket-room .cmd {
+  color: #daa500;
+}
+#socket-room .whisper {
+  color: #aaaaaa;
+}
+#socket-room .shout {
+  font-weight: bold;
 }
 
-#socket-room .username { color: #2ba6cb; }
-
-#socket-room .whisper { color: #aaa; }
-
-#socket-room .shout { font-weight: bold; }
-
-#socket-room .cmd { color: #DAA500; }
+#socket-users li {
+  list-style-type: none;
+}
+#socket-users li:first-child {
+  color: #35be00;
+}

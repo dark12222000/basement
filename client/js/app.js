@@ -31,8 +31,8 @@ socket.on('connected', function(event){
 		$(this).find('[name=socket-message]').val('');
 		
 		if(message){
-			//if(message.charAt(0) == '/') socket.emit('doCmd', { sender: user.id, roomID: room.id, text: message });
-			//else socket.emit('doSay', { sender: user.id, roomID: room.id, text: message });
+			if(message.charAt(0) != '/') message = '/say ' + message;
+			console.log('Message: ', message);
 			socket.emit('doCmd', { sender: user.id, roomID: room.id, text: message });
 		}
 		return false;
