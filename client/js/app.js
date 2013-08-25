@@ -1,12 +1,12 @@
 $(document).foundation();
 
-var user = {};
 var socket = io.connect('http://bs1.adventurestory.net:3000');
 
 socket.on('connected', function(event){
 	console.log('Connected successfully to socket');
 	
-	var room = { id: document.location.hash.substr(1) };
+	var user = {}; //This is "Me", currently logged in user
+	var room = new Room(document.location.hash.substr(1));
 	
 	/* Foundation Events */
 	if(room.id) $('#registerClient').foundation('reveal', 'open', { closeOnBackgroundClick: false });
@@ -18,7 +18,8 @@ socket.on('connected', function(event){
 	});
 	
 	$('form.login').submit(function(){
-		socket.emit('registerClient', { name: $(this).find('input[name=name]').val(), roomID: room.id });
+		user.name = $(this).find('input[name=name]').val();
+		socket.emit('registerClient', { name: user.name, roomID: room.id });
 		$(this).closest('form').foundation('reveal', 'close');
 		return false;
 	});
@@ -41,20 +42,19 @@ socket.on('connected', function(event){
 		room.id = response.roomID;
 	});
 	
-	socket.on('clientRegistered', function(response){
+	socket.on('clientRegistered', function(response){ //Registered "Me"
 		console.log('clientRegistered: ', response);
 		user.id = response.userID;
 		user.isAdmin = response.admin;
-		$('#socket-connected').fadeIn()
-			.find('#socket-url').val(document.location.pathname + '#' + room.id)
-			.on('click', function(){ this.select(); }
-		);
 	});
 	
 	socket.on('sendClients', function(response){
 		console.log('sendClients: ', response);
 		$('#socket-users').html('');
 		$.each(response.clients, function(index, user) {
+			room.users.push(user);
+			if(index == 0) room.admins.push(user);
+
 			var userType = index == 0 ? 'admin' : 'user';
 			$('#socket-users').append('<li class="'+ userType +'">'+user);
 		});
@@ -72,10 +72,11 @@ socket.on('connected', function(event){
 		
 		var username = response.text.split(':', 1)[0];
 		var message = response.text.substring(username.length + 1, response.text.length);
-		var userType = username == $('#socket-users li:first').text() ? 'admin' : 'user';
+		var userType = username == room.admins[0] ? 'admin' : 'user';
 
 		theRoom.append('<p><span class="'+ userType +'">' + username + ':</span> <span class="'+ response.type +'">' + message+ '</span></p>');
 		
 		if(scrollDown) theRoom.scrollTop(theRoom[0].scrollHeight);
+		console.log('Room now: ', room);
 	});
 });
