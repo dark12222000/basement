@@ -1,3 +1,24 @@
+body {
+  -webkit-transition: background 1s ease-in-out, 1s;
+  -moz-transition: background 1s ease-in-out, 1s;
+  -o-transition: background 1s ease-in-out, 1s;
+  transition: background 1s ease-in-out, 1s;
+}
+body > .row {
+  position: relative;
+  -webkit-transition: all 1s ease-in-out, 1s;
+  -moz-transition: all 1s ease-in-out, 1s;
+  -o-transition: all 1s ease-in-out, 1s;
+  transition: all 1s ease-in-out, 1s;
+}
+
+body:not(.loggedIn) {
+  background: #1e4677;
+}
+body:not(.loggedIn) > .row {
+  left: -200%;
+}
+
 #socket-room {
   height: 20em;
   overflow-x: hidden;

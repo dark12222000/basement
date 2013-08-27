@@ -21,6 +21,7 @@ socket.on('connected', function(event){
 		user.name = $(this).find('input[name=name]').val();
 		socket.emit('registerClient', { name: user.name, roomID: room.id });
 		$(this).closest('form').foundation('reveal', 'close');
+		$('body').addClass('loggedIn');
 		return false;
 	});
 	

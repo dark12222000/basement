@@ -1,6 +1,21 @@
+@import "compass/css3"
+
 $user: #2ba6cb
 $admin: #35be00
 
+//Slide/fade in on login
+body
+	@include single-transition(background 1s ease-in-out)
+	> .row
+		position: relative
+		@include single-transition(all 1s ease-in-out)
+
+body:not(.loggedIn)
+	background: #1E4677
+	> .row
+		left: -200%	
+
+//Chatroom
 #socket-room
 	height: 20em
 	overflow-x: hidden
@@ -17,6 +32,7 @@ $admin: #35be00
 	.shout
 		font-weight: bold
 
+//Users list
 #socket-users li
 	list-style-type: none
 	// User Types
