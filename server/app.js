@@ -247,6 +247,7 @@ io.sockets.on('connection', function (socket){
             case 'tell':
                 room.findByName(proc[1], function(foundUser){
                     foundUser.say(user.name + " whispers: " + cmdString.substr(proc[0].length + proc[1].length + 2), 'whisper'); //room.id
+                    user.say('You whisper to ' + raw[1] + '.', 'cmd');
                 });
                 return true;
             break;
