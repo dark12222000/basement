@@ -57,7 +57,10 @@ socket.on('connected', function(event){
 			if(index == 0) room.admins.push(user);
 
 			var userType = index == 0 ? 'admin' : 'user';
-			$('#socket-users').append('<li class="'+ userType +'">'+user);
+			$('#socket-users').append('<li class="'+ userType +'" title="Whisper with '+ user +'">'+ user);
+			$('#socket-users li').on('click', function(){
+				$('[name=socket-message]').val('/whisper '+ $(this).text());
+			});
 		});
 		$('#socket-room').append('<p>You are connected to room ' + room.id + '</p>');
 	});

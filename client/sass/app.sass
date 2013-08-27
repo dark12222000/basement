@@ -13,12 +13,14 @@ body
 body:not(.loggedIn)
 	background: #1E4677
 	> .row
-		left: -200%	
+		left: -200%
 
 //Chatroom
 #socket-room
 	height: 20em
+	margin-bottom: 0
 	overflow-x: hidden
+	resize: vertical
 	// User Types
 	.admin
 		color: $admin
@@ -34,6 +36,7 @@ body:not(.loggedIn)
 
 //Users list
 #socket-users li
+	cursor: pointer
 	list-style-type: none
 	// User Types
 	&.admin

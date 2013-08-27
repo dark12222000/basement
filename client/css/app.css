@@ -21,7 +21,9 @@ body:not(.loggedIn) > .row {
 
 #socket-room {
   height: 20em;
+  margin-bottom: 0;
   overflow-x: hidden;
+  resize: vertical;
 }
 #socket-room .admin {
   color: #35be00;
@@ -40,6 +42,7 @@ body:not(.loggedIn) > .row {
 }
 
 #socket-users li {
+  cursor: pointer;
   list-style-type: none;
 }
 #socket-users li.admin {
