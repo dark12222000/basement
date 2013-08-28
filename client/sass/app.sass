@@ -3,12 +3,19 @@
 $user: #2ba6cb
 $admin: #35be00
 
+@font-face
+	font-family: 'icomoon' 
+	src: url('../img/fonts/icomoon.eot')
+	src: url('../img/fonts/icomoon.eot?#iefix') format("embedded-opentype"), url('../img/fonts/icomoon.woff') format("woff"), url('../img/fonts/icomoon.ttf') format("truetype"), url('../img/fonts/icomoon.svg#icomoon') format("svg")
+	font-weight: normal
+	font-style: normal
+
 //Slide/fade in on login
 body
-	@include single-transition(background 1s ease-in-out)
+	@include transition(background 1s ease-in-out)
 	> .row
 		position: relative
-		@include single-transition(all 1s ease-in-out)
+		@include transition(all 1s ease-in-out)
 
 body:not(.loggedIn)
 	background: #1E4677
@@ -43,3 +50,15 @@ body:not(.loggedIn)
 		color: $admin
 	&.user
 		color: $user
+
+//Dice Rolling
+#dice a.dice
+	font-family: 'icomoon'
+	font-size: 3em
+	@include transition(all 100ms)
+	&:hover
+		color: #A0E9FF
+		text-shadow: 0px 0px 5px
+	&:active
+		color: black
+		text-shadow: 0px 0px 15px

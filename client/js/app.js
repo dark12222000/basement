@@ -17,10 +17,21 @@ socket.on('connected', function(event){
 		socket.emit('createRoom');
 	});
 	
+	$('form.login input[name=name]').on('keydown', function(){
+		input = $(this);
+		setTimeout(function(){
+			if(input.val().length > 0) input.parent().find('input[type=submit]').removeAttr('disabled');
+			else input.parent().find('input[type=submit]').attr('disabled', 'disabled');
+		}, 100);
+	});
+
 	$('form.login').submit(function(){
 		user.name = $(this).find('input[name=name]').val();
 		socket.emit('registerClient', { name: user.name, roomID: room.id });
 		$(this).closest('form').foundation('reveal', 'close');
+		$('#socket-room-link').val(document.URL + '#' + room.id).on('click', function(){
+			$(this).select();
+		});
 		$('body').addClass('loggedIn');
 		return false;
 	});

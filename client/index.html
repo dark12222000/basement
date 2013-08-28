@@ -16,24 +16,15 @@
 		<div class="large-12 columns">
 			<h2>DungeonCrawl <small>Version 0.1</small></h2>
 			<hr />
+			<input type="text" readonly class="large-12" id="socket-room-link" />
 		</div>
 	</div>
 	
 	<div class="row">
-		<div class="large-3 columns">
+		<div class="large-9 columns">
 			<div class="row">
 				<div class="large-12 columns">
-					<div class="panel">
-						<ul id="socket-users">
-							<!-- Logged in users populate here -->
-						</ul>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="large-6 columns">
-			<div class="row">
-				<div class="large-12 columns">
+					<h5>The Dungeon</h5>
 					<div id="socket-room" class="panel">
 						<!-- The chat happens here -->
 					</div>
@@ -43,7 +34,7 @@
 								<input type="text" name="socket-message" />
 							</div>
 							<div class="small-2 columns">
-								<button type="submit" class="button prefix">Send</button>
+								<button type="submit" class="prefix">Send</button>
 							</div>
 						</form>
 					</div>
@@ -53,8 +44,52 @@
 		<div class="large-3 columns">
 			<div class="row">
 				<div class="large-12 columns">
+					<h5>Players</h5>
 					<div class="panel">
-						<p>Die go here</p>
+						<ul id="socket-users">
+							<!-- Logged in users populate here -->
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="large-12 columns">
+					<h5>Dice</h5>
+					<div id="dice" class="panel">
+						<table>
+							<thead>
+								<tr>
+									<th>#
+									<th>Type
+								</tr>
+							</thead>
+							<tbody>
+								<tr class="d4">
+									<td><input type="number" min="1" value="1" />
+									<td><a class="dice">&#xe000;</a>
+								</tr>
+								<tr class="d6">
+									<td><input type="number" min="1" value="1" />
+									<td><a class="dice">&#xe002;</a>
+								</tr>
+								<tr class="d8">
+									<td><input type="number" min="1" value="1" />
+									<td><a class="dice">&#xe003;</a>
+								</tr>
+								<tr class="d10">
+									<td><input type="number" min="1" value="1" />
+									<td><a class="dice">&#xe004;</a>
+								</tr>
+								<tr class="d12">
+									<td><input type="number" min="1" value="1" />
+									<td><a class="dice">&#xe005;</a>
+								</tr>
+								<tr class="d20">
+									<td><input type="number" min="1" value="1" />
+									<td><a class="dice">&#xe001;</a>
+								</tr>
+							</tbody>
+						</table>
 					</div>
 				</div>
 			</div>
@@ -72,7 +107,7 @@
 		<form class="login">
 			<h2>Login</h2>
 			<input type="text" name="name" placeholder="Name" />
-			<p><input type="submit" class="expand button" value="Login" /></p>
+			<p><input type="submit" class="expand button" value="Login" disabled /></p>
 		</form>
 	</div>
 
