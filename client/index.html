@@ -21,7 +21,7 @@
 	</div>
 	
 	<div class="row">
-		<div class="large-9 columns">
+		<div class="large-6 columns">
 			<div class="row">
 				<div class="large-12 columns">
 					<h5>The Dungeon</h5>
@@ -41,56 +41,52 @@
 				</div>
 			</div>
 		</div>
-		<div class="large-3 columns">
-			<div class="row">
-				<div class="large-12 columns">
-					<h5>Players</h5>
-					<div class="panel">
-						<ul id="socket-users">
-							<!-- Logged in users populate here -->
-						</ul>
-					</div>
+		<div class="large-6 columns">
+			<div class="large-6 columns">
+				<h5>Dice</h5>
+				<div id="dice" class="panel">
+					<table>
+						<thead>
+							<tr>
+								<th>#
+								<th>Type
+							</tr>
+						</thead>
+						<tbody>
+							<tr class="d4">
+								<td><input type="number" min="1" value="1" />
+								<td><a class="dice">&#xe000;</a>
+							</tr>
+							<tr class="d6">
+								<td><input type="number" min="1" value="1" />
+								<td><a class="dice">&#xe002;</a>
+							</tr>
+							<tr class="d8">
+								<td><input type="number" min="1" value="1" />
+								<td><a class="dice">&#xe003;</a>
+							</tr>
+							<tr class="d10">
+								<td><input type="number" min="1" value="1" />
+								<td><a class="dice">&#xe004;</a>
+							</tr>
+							<tr class="d12">
+								<td><input type="number" min="1" value="1" />
+								<td><a class="dice">&#xe005;</a>
+							</tr>
+							<tr class="d20">
+								<td><input type="number" min="1" value="1" />
+								<td><a class="dice">&#xe001;</a>
+							</tr>
+						</tbody>
+					</table>
 				</div>
 			</div>
-			<div class="row">
-				<div class="large-12 columns">
-					<h5>Dice</h5>
-					<div id="dice" class="panel">
-						<table>
-							<thead>
-								<tr>
-									<th>#
-									<th>Type
-								</tr>
-							</thead>
-							<tbody>
-								<tr class="d4">
-									<td><input type="number" min="1" value="1" />
-									<td><a class="dice">&#xe000;</a>
-								</tr>
-								<tr class="d6">
-									<td><input type="number" min="1" value="1" />
-									<td><a class="dice">&#xe002;</a>
-								</tr>
-								<tr class="d8">
-									<td><input type="number" min="1" value="1" />
-									<td><a class="dice">&#xe003;</a>
-								</tr>
-								<tr class="d10">
-									<td><input type="number" min="1" value="1" />
-									<td><a class="dice">&#xe004;</a>
-								</tr>
-								<tr class="d12">
-									<td><input type="number" min="1" value="1" />
-									<td><a class="dice">&#xe005;</a>
-								</tr>
-								<tr class="d20">
-									<td><input type="number" min="1" value="1" />
-									<td><a class="dice">&#xe001;</a>
-								</tr>
-							</tbody>
-						</table>
-					</div>
+			<div class="large-6 columns">
+				<h5>Players</h5>
+				<div class="panel">
+					<ul id="socket-users">
+						<!-- Logged in users populate here -->
+					</ul>
 				</div>
 			</div>
 		</div>

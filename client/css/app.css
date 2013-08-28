@@ -28,7 +28,7 @@ body:not(.loggedIn) > .row {
 }
 
 #socket-room {
-  height: 20em;
+  height: 25em;
   margin-bottom: 0;
   overflow-x: hidden;
   resize: vertical;
