@@ -6,6 +6,8 @@ socket.on('connected', function(event){
 	console.log('Connected successfully to socket');
 	
 	var user = {}; //This is "Me", currently logged in user
+	user.cmdLog = [];
+	user.cmdLogIndex = -1;
 	var room = new Room(document.location.hash.substr(1));
 	
 	/* Foundation Events */
@@ -44,8 +46,21 @@ socket.on('connected', function(event){
 			if(message.charAt(0) != '/') message = '/say ' + message;
 			console.log('Message: ', message);
 			socket.emit('doCmd', { sender: user.id, roomID: room.id, text: message });
+
+			user.cmdLogIndex = -1;
+			if(message.toLowerCase().slice(0,4) != '/say') user.cmdLog.unshift(message);
 		}
 		return false;
+	}).on('keyup', function(event){
+		switch(event.keyCode){
+			case 38: //Up Arrow
+				if(user.cmdLogIndex + 1 < user.cmdLog.length) $('[name=socket-message]').val(user.cmdLog[++user.cmdLogIndex]);
+			break;
+			case 40: //Down Arrow
+				if(user.cmdLogIndex - 1 >= 0) $('[name=socket-message]').val(user.cmdLog[--user.cmdLogIndex]);
+			break;
+		}
+		console.log(user.cmdLogIndex, user.cmdLog.length, user.cmdLog);
 	});
 
 	$('#dice .dice').on('click', function(){
