@@ -47,6 +47,13 @@ socket.on('connected', function(event){
 		}
 		return false;
 	});
+
+	$('#dice .dice').on('click', function(){
+		var num = $(this).closest('tr').find('input[type=number]').val();
+		var die = $(this).closest('tr').attr('class');
+		var roll = '/roll ' + num + die;
+		socket.emit('doCmd', { sender: user.id, roomID: room.id, text: roll });
+	});
 	
 	/* Event Binds */
 	socket.on('roomCreated', function(response){
@@ -68,7 +75,7 @@ socket.on('connected', function(event){
 			if(index == 0) room.admins.push(user);
 
 			var userType = index == 0 ? 'admin' : 'user';
-			$('#socket-users').append('<li class="'+ userType +'" title="Whisper with '+ user +'">'+ user);
+			$('#socket-users').append('<li class="'+ userType +'" data-tooltip title="Whisper with '+ user +'">'+ user + ' ');
 			$('#socket-users li').on('click', function(){
 				$('[name=socket-message]').val('/whisper '+ $(this).text());
 			});
