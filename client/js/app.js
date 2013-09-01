@@ -31,7 +31,8 @@ socket.on('connected', function(event){
 		user.name = $(this).find('input[name=name]').val();
 		socket.emit('registerClient', { name: user.name, roomID: room.id });
 		$(this).closest('form').foundation('reveal', 'close');
-		$('#socket-room-link').val(document.URL + '#' + room.id).on('click', function(){
+		var shareURL = (document.location.hash.length > 0) ? document.URL : document.URL + '#' + room.id;
+		$('#socket-room-link').val(shareURL).on('click', function(){
 			$(this).select();
 		});
 		$('body').addClass('loggedIn');
