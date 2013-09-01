@@ -12,9 +12,26 @@
 </head>
 <body>
 
+	<!-- Create a Room Reveal -->
+	<div id="createRoom" class="reveal-modal large">
+		<h2>Welcome to DungeonCrawl</h2>
+		<p class="lead">TODO: Here's all the cool stuff it does.</p>
+		<p>To begin it's as simple as creating a room.</p>
+		<p><a href="#" data-reveal-id="registerClient" class="expand button createRoom">Create Room</a></p>
+	</div>
+	<!-- Login Reveal -->
+	<div id="registerClient" class="reveal-modal small">
+		<form class="login">
+			<h2>Login</h2>
+			<input type="text" name="name" placeholder="Name" />
+			<p><input type="submit" class="expand button" value="Login" disabled /></p>
+		</form>
+	</div>
+
+	<!-- Actual App -->
 	<div class="row">
 		<div class="large-12 columns">
-			<h2>DungeonCrawl <small>Version 0.1</small></h2>
+			<h2>DungeonCrawl <small><a href="http://adventurestory.net/" data-tooltip title="View information about this app and its latest release." target="_blank">Version 0.1</a></small></h2>
 			<hr />
 			<input type="text" readonly class="large-12" id="socket-room-link" data-tooltip title="Send this link to a friend to invite them to join" />
 		</div>
@@ -90,21 +107,6 @@
 				</div>
 			</div>
 		</div>
-	</div>
-	
-	
-	<div id="createRoom" class="reveal-modal large">
-		<h2>Welcome to Basement</h2>
-		<p class="lead">Here's all the cool stuff it does.</p>
-		<p>Some text about clicking below to create a room.</p>
-		<p><a href="#" data-reveal-id="registerClient" class="expand button createRoom">Create Room</a></p>
-	</div>
-	<div id="registerClient" class="reveal-modal small">
-		<form class="login">
-			<h2>Login</h2>
-			<input type="text" name="name" placeholder="Name" />
-			<p><input type="submit" class="expand button" value="Login" disabled /></p>
-		</form>
 	</div>
 
   <script src="js/vendor/custom.modernizr.js"></script>
