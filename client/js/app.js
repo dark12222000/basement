@@ -100,8 +100,6 @@ socket.on('connected', function(event){
 			});
 		});
 
-		console.log('OLD Users List', oldUsers);
-		console.log('New Users List', room.users);
 		if(oldUsers.length == 0) $('#socket-room').append('<p class="notice">Welcome to the dungeon.</p>');
 		else {
 			if(oldUsers.length < room.users.length) {
