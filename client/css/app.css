@@ -48,6 +48,9 @@ body:not(.loggedIn) > .row {
 #socket-room .shout {
   font-weight: bold;
 }
+#socket-room .notice {
+  color: #cccccc;
+}
 
 #socket-users li {
   cursor: pointer;

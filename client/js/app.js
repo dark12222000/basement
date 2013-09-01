@@ -60,7 +60,7 @@ socket.on('connected', function(event){
 				if(user.cmdLogIndex - 1 >= 0) $('[name=socket-message]').val(user.cmdLog[--user.cmdLogIndex]);
 			break;
 		}
-		console.log(user.cmdLogIndex, user.cmdLog.length, user.cmdLog);
+		//console.log(user.cmdLogIndex, user.cmdLog.length, user.cmdLog);
 	});
 
 	$('#dice .dice').on('click', function(){
@@ -85,8 +85,11 @@ socket.on('connected', function(event){
 	socket.on('sendClients', function(response){
 		console.log('sendClients: ', response);
 		$('#socket-users').html('');
-		$.each(response.clients, function(index, user) {
-			room.users.push(user);
+
+		var oldUsers = room.users.slice(0);
+		room.users = response.clients.slice(0);
+
+		$.each(room.users, function(index, user) {
 			if(index == 0) room.admins.push(user);
 
 			var userType = index == 0 ? 'admin' : 'user';
@@ -95,7 +98,17 @@ socket.on('connected', function(event){
 				$('[name=socket-message]').val('/whisper '+ $(this).text());
 			});
 		});
-		$('#socket-room').append('<p>You are connected to room ' + room.id + '</p>');
+
+		console.log('OLD Users List', oldUsers);
+		console.log('New Users List', room.users);
+		if(oldUsers.length == 0) $('#socket-room').append('<p class="notice">Welcome to the dungeon.</p>');
+		else {
+			if(oldUsers.length < room.users.length) {
+				$('#socket-room').append('<p class="notice">New user has joined the dungeon.</p>');
+			} else {
+				$('#socket-room').append('<p class="notice">User has left the dungeon.</p>');
+			}
+		}
 	});
 	
 	socket.on('updateClients', function(response){
@@ -109,7 +122,7 @@ socket.on('connected', function(event){
 		
 		var username = response.text.split(':', 1)[0];
 		var message = response.text.substring(username.length + 1, response.text.length);
-		var userType = username == room.admins[0] ? 'admin' : 'user';
+		var userType = $.inArray(username, room.admins) ? 'admin' : 'user';
 
 		theRoom.append('<p><span class="'+ userType +'">' + username + ':</span> <span class="'+ response.type +'">' + message+ '</span></p>');
 		
